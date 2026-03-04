@@ -53,40 +53,52 @@ const cities = [
     image: "./destination-merzouga-morocco.jpg",
     experiences: ["Camel trek at golden hour", "Sahara storytelling circle", "Sandboarding lessons"],
   },
-];
-
-const services = [
-  "Tailor-made journeys from four to fifteen days",
-  "Family escapes, honeymoons, and adventure mixes",
-  "Boutique riads and desert camps with curated comfort",
-  "Local permit handling, logistics, and bilingual guiding",
-  "Sustainability partners rooted in each destination",
-];
-
-const timeline = [
   {
-    day: "Day 1",
-    title: "Welcome to Marrakech",
-    detail: "Airport meet, soft launch at a riad, followed by a night stroll with spices sizzling on the fire pits.",
+    name: "More destinations soon",
+    region: "Coming soon",
+    highlight: "New routes in planning",
+    description: "Fresh city ideas are being crafted based on season, festivals, and your travel style.",
+    palette: "#5f4b8b",
+    image: "",
+    experiences: ["More curated stays", "More local hosts", "More hidden gems"],
+    placeholder: true,
   },
   {
-    day: "Day 3",
-    title: "Atlas welcome",
-    detail: "Hike to an argan grove, share a lunch with Berber families, and swim in a secret waterfall.",
-  },
-  {
-    day: "Day 6",
-    title: "Atlantic unwind",
-    detail: "Essaouira's calm harbor, artisan tours, and a windswept seafood meal on the ramparts.",
-  },
-  {
-    day: "Last",
-    title: "Desert crescendo",
-    detail: "Sail across Merzouga dunes, sleep beneath the stars, and depart with an acoustic desert concert.",
+    name: "Your custom stop",
+    region: "Tailor-made",
+    highlight: "Built around your interests",
+    description: "Share what you love, and Youssef can add private stops that match your rhythm.",
+    palette: "#6b705c",
+    image: "",
+    experiences: ["Culture", "Nature", "Wellness"],
+    placeholder: true,
   },
 ];
 
-const timelineLoop = [...timeline, ...timeline];
+const tripOptions = {
+  daytrip: {
+    label: "Day trip",
+    title: "One-day Morocco escape",
+    price: "From 79€ / person",
+    details: [
+      "Private driver with hotel pick-up and drop-off",
+      "One guided local experience (market, medina, or coastline)",
+      "Lunch reservation and flexible return time",
+    ],
+  },
+  multiday: {
+    label: "Multi-day trip",
+    title: "3 to 8-day curated itinerary",
+    price: "From 540€ / person",
+    details: [
+      "Boutique stays or desert camp with breakfast included",
+      "Daily route planning with local guide coordination",
+      "Airport transfer plus support before and during the trip",
+    ],
+  },
+};
+const citySlides = cities;
+const citySlidesLoop = [...citySlides, ...citySlides];
 
 const testimonials = [
   {
@@ -99,23 +111,39 @@ const testimonials = [
   },
 ];
 
-const CityCard = ({ city, index }) => html`
-  <article className="city-card" style=${{ "--city-image": `url(${city.image})` }}>
-    <div className="city-highlight">
-      <span style=${{ background: city.palette }}>${index + 1}</span>
-      <strong>${city.highlight}</strong>
+const CitySlide = ({ city, index, onSelect }) => html`
+  <button
+    className=${`destination-slide ${city.placeholder ? "is-placeholder" : ""}`}
+    style=${{ "--city-image": city.image ? `url(${city.image})` : "none", "--city-accent": city.palette }}
+    onClick=${() => onSelect(city)}
+    aria-label=${`Open details for ${city.name}`}
+  >
+    <div className="destination-image" />
+    <div className="destination-caption">
+      <span>${index + 1}</span>
+      <strong>${city.name}</strong>
     </div>
-    <h3>${city.name}</h3>
-    <span className="region">${city.region}</span>
-    <p>${city.description}</p>
-    <ul>
-      ${city.experiences.map((item) => html`<li key=${item}>${item}</li>`)}
-    </ul>
-  </article>
+  </button>
 `;
 
-const App = () => html`
-  <div className="page-wrapper">
+const App = () => {
+  const [selectedCity, setSelectedCity] = React.useState(null);
+  const [selectedTripType, setSelectedTripType] = React.useState("daytrip");
+  const selectedTrip = tripOptions[selectedTripType];
+
+  React.useEffect(() => {
+    const closeOnEscape = (event) => {
+      if (event.key === "Escape") {
+        setSelectedCity(null);
+      }
+    };
+
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, []);
+
+  return html`
+    <div className="page-wrapper">
     <section className="hero section-card">
       <div className="hero-content">
         <p>Youssef Ettalbi - Your Morocco story guide</p>
@@ -125,7 +153,7 @@ const App = () => html`
         <p>
           Each itinerary blends hospitality, hidden gems, and modern comfort with Youssef personally curating your pace.
         </p>
-        <a className="hero-cta" href="mailto:hello@youssefettalbi.com">
+        <a className="hero-cta" href="mailto:youssef.ett66@gmail.com">
           Plan a bespoke visit
         </a>
         <div className="hero-stats">
@@ -148,36 +176,47 @@ const App = () => html`
     <section className="section-card">
       <div className="section-heading">
         <h2>Signature services</h2>
-        <p>Every detail stays flexible, local, and intimate.</p>
+        <p>Choose a format and view sample pricing.</p>
       </div>
+      <div className="trip-switcher" role="tablist" aria-label="Trip type selector">
+        ${Object.entries(tripOptions).map(([key, option]) => html`
+          <button
+            key=${key}
+            className=${`trip-switch ${selectedTripType === key ? "is-active" : ""}`}
+            onClick=${() => setSelectedTripType(key)}
+            role="tab"
+            aria-selected=${selectedTripType === key}
+          >
+            ${option.label}
+          </button>
+        `)}
+      </div>
+      <article className="trip-card">
+        <h3>${selectedTrip.title}</h3>
+        <p className="trip-price">${selectedTrip.price}</p>
+        <ul>
+          ${selectedTrip.details.map((detail) => html`<li key=${detail}>${detail}</li>`)}
+        </ul>
+      </article>
       <div className="service-list">
-        ${services.map((service) => html`<div key=${service} className="service-pill">${service}</div>`)}
+        <div className="service-pill">Flexible planning with direct support from Youssef</div>
       </div>
     </section>
 
     <section className="section-card">
       <div className="section-heading">
         <h2>Cities that inspire</h2>
-        <p>Each stop pairs a story, a local host, and a personal comfort note.</p>
+        <p>Tap any moving card to open full details.</p>
       </div>
-      <div className="grid">
-        ${cities.map((city, index) => html`<${CityCard} key=${city.name} city=${city} index=${index} />`)}
-      </div>
-    </section>
-
-    <section className="section-card">
-      <div className="section-heading">
-        <h2>Rhythm of a stay</h2>
-        <p>Sample pacing to help you feel each landscape before moving on.</p>
-      </div>
-      <div className="timeline">
-        <div className="timeline-track">
-          ${timelineLoop.map((item, index) => html`
-            <article key=${item.day + "-" + index} className="timeline-card">
-              <h4>${item.day}</h4>
-              <strong>${item.title}</strong>
-              <p>${item.detail}</p>
-            </article>
+      <div className="destination-carousel">
+        <div className="destination-track">
+          ${citySlidesLoop.map((city, index) => html`
+            <${CitySlide}
+              key=${city.name + "-" + index}
+              city=${city}
+              index=${index % citySlides.length}
+              onSelect=${setSelectedCity}
+            />
           `)}
         </div>
       </div>
@@ -216,8 +255,33 @@ const App = () => html`
     <footer>
       <p>Crafted with partners across Morocco - Inspired by landscapes, people, and modern explorers.</p>
     </footer>
-  </div>
-`;
+    </div>
+
+    ${selectedCity &&
+    html`
+      <div className="modal-backdrop" onClick=${() => setSelectedCity(null)}>
+        <article className="modal-card" onClick=${(event) => event.stopPropagation()}>
+          <button className="modal-close" onClick=${() => setSelectedCity(null)} aria-label="Close destination modal">
+            ×
+          </button>
+          <div
+            className=${`modal-image ${selectedCity.placeholder ? "is-placeholder" : ""}`}
+            style=${{ "--city-image": selectedCity.image ? `url(${selectedCity.image})` : "none", "--city-accent": selectedCity.palette }}
+          />
+          <div className="modal-content">
+            <h3>${selectedCity.name}</h3>
+            <p className="modal-region">${selectedCity.region}</p>
+            <p><strong>${selectedCity.highlight}</strong></p>
+            <p>${selectedCity.description}</p>
+            <ul>
+              ${selectedCity.experiences.map((item) => html`<li key=${item}>${item}</li>`)}
+            </ul>
+          </div>
+        </article>
+      </div>
+    `}
+  `;
+};
 
 const rootElement = document.getElementById("root");
 createRoot(rootElement).render(React.createElement(App));
