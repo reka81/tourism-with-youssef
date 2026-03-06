@@ -54,6 +54,46 @@ const cities = [
     experiences: ["Camel trek at golden hour", "Sahara storytelling circle", "Sandboarding lessons"],
   },
   {
+    name: "Ourika",
+    region: "Atlas valley",
+    highlight: "River walks & mountain villages",
+    description:
+      "A refreshing valley escape with flowing streams, Berber homes, and scenic trails that begin just beyond Marrakech.",
+    palette: "#2f8f83",
+    image: "./istockphoto-1286444418-612x612.jpg",
+    experiences: ["Setti Fatma waterfalls hike", "Valley-side lunch", "Berber family tea stop"],
+  },
+  {
+    name: "Imlil",
+    region: "High Atlas gateway",
+    highlight: "Toubkal views & crisp alpine air",
+    description:
+      "Stone mountain villages, terraced orchards, and panoramic passes make Imlil perfect for soft trekking and winter charm.",
+    palette: "#5c7c4a",
+    image: "",
+    experiences: ["Guided village-to-village walk", "Mint tea with mountain hosts", "Toubkal viewpoint picnic"],
+  },
+  {
+    name: "Ouzod",
+    region: "Middle Atlas falls",
+    highlight: "Waterfall cliffs & olive groves",
+    description:
+      "One of Morocco's most famous cascades, where rainbow mist, monkey sightings, and boat rides create a playful day out.",
+    palette: "#3f88c5",
+    image: "",
+    experiences: ["Waterfall trail circuit", "Traditional tagine by the falls", "Boat ride at the base"],
+  },
+  {
+    name: "Ouarzazate",
+    region: "Desert cinema crossroads",
+    highlight: "Kasbahs, studios & Saharan light",
+    description:
+      "Gateway to Ait Benhaddou and Draa valleys, blending cinematic landscapes with kasbah architecture and desert routes.",
+    palette: "#a05a2c",
+    image: "",
+    experiences: ["Ait Benhaddou guided visit", "Atlas film studios tour", "Sunset at Taourirt Kasbah"],
+  },
+  {
     name: "More destinations soon",
     region: "Coming soon",
     highlight: "New routes in planning",
@@ -76,24 +116,35 @@ const cities = [
 ];
 
 const tripOptions = {
-  daytrip: {
-    label: "Day trip",
-    title: "One-day Morocco escape",
-    price: "From 79€ / person",
-    details: [
-      "Private driver with hotel pick-up and drop-off",
-      "One guided local experience (market, medina, or coastline)",
-      "Lunch reservation and flexible return time",
+  collective: {
+    label: "Collective option",
+    title: "Collective trip options",
+    price: "Group pricing in DH",
+    sections: [
+      {
+        label: "One-day trip",
+        items: [
+          { city: "Ourika", price: "150 DH", guideIncluded: true },
+          { city: "Imlil", price: "150 DH", guideIncluded: true },
+          { city: "Essaouira", price: "200 DH", guideIncluded: false },
+          { city: "Ouzod", price: "200 DH", guideIncluded: true },
+          { city: "Ouarzazate", price: "200 DH", guideIncluded: false },
+        ],
+      },
+      {
+        label: "3-day trip",
+        items: [{ city: "Merzouga", price: "1500 DH", guideIncluded: false }],
+      },
     ],
   },
-  multiday: {
-    label: "Multi-day trip",
-    title: "3 to 8-day curated itinerary",
-    price: "From 540€ / person",
+  private: {
+    label: "Private option",
+    title: "Singular / private trip",
+    price: "Custom quote based on your route",
     details: [
-      "Boutique stays or desert camp with breakfast included",
-      "Daily route planning with local guide coordination",
-      "Airport transfer plus support before and during the trip",
+      "Private driver and dedicated guide for your pace",
+      "Flexible one-day or multi-day itinerary planning",
+      "Door-to-door support and custom activity choices",
     ],
   },
 };
@@ -128,8 +179,22 @@ const CitySlide = ({ city, index, onSelect }) => html`
 
 const App = () => {
   const [selectedCity, setSelectedCity] = React.useState(null);
-  const [selectedTripType, setSelectedTripType] = React.useState("daytrip");
+  const [selectedTripType, setSelectedTripType] = React.useState("collective");
   const selectedTrip = tripOptions[selectedTripType];
+
+  const normalizeCityName = (value) =>
+    value
+      .toLowerCase()
+      .replace(/\(.*?\)/g, "")
+      .replace(/[^a-z0-9]/g, "");
+
+  const findCityByName = (name) => {
+    const target = normalizeCityName(name);
+    return cities.find((city) => {
+      const normalizedCity = normalizeCityName(city.name);
+      return normalizedCity.includes(target) || target.includes(normalizedCity);
+    });
+  };
 
   React.useEffect(() => {
     const closeOnEscape = (event) => {
@@ -194,9 +259,43 @@ const App = () => {
       <article className="trip-card">
         <h3>${selectedTrip.title}</h3>
         <p className="trip-price">${selectedTrip.price}</p>
-        <ul>
-          ${selectedTrip.details.map((detail) => html`<li key=${detail}>${detail}</li>`)}
-        </ul>
+        ${selectedTrip.sections
+          ? html`
+              <div className="trip-sections">
+                ${selectedTrip.sections.map(
+                  (section) => html`
+                    <section key=${section.label} className="trip-section">
+                      <h4>${section.label}</h4>
+                      <ul>
+                        ${section.items.map(
+                          (item) => html`
+                            <li key=${section.label + item.city}>
+                              <button
+                                className="city-link-button"
+                                onClick=${() => {
+                                  const matchedCity = findCityByName(item.city);
+                                  if (matchedCity) {
+                                    setSelectedCity(matchedCity);
+                                  }
+                                }}
+                              >
+                                ${item.city}
+                              </button>
+                              : ${item.price}${item.guideIncluded ? " (guide included)" : ""}
+                            </li>
+                          `
+                        )}
+                      </ul>
+                    </section>
+                  `
+                )}
+              </div>
+            `
+          : html`
+              <ul>
+                ${selectedTrip.details.map((detail) => html`<li key=${detail}>${detail}</li>`)}
+              </ul>
+            `}
       </article>
       <div className="service-list">
         <div className="service-pill">Flexible planning with direct support from Youssef</div>
@@ -209,7 +308,7 @@ const App = () => {
         <p>Tap any moving card to open full details.</p>
       </div>
       <div className="destination-carousel">
-        <div className="destination-track">
+        <div className="destination-track" style=${{ "--city-count": citySlides.length }}>
           ${citySlidesLoop.map((city, index) => html`
             <${CitySlide}
               key=${city.name + "-" + index}
