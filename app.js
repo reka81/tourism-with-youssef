@@ -36,7 +36,7 @@ const cities = [
     description:
       "Medieval alleyways, UNESCO masterpieces, and peaceful riad rooftops where artisans dye leather in jewel tones.",
     palette: "#f5a946",
-    image: "./wp3120316.jpg",
+    image: "./Fes.jpg",
     experiences: [
       "Labyrinth walk with a historian",
       "Ceramics studio discovery",
@@ -60,7 +60,7 @@ const cities = [
     description:
       "A refreshing valley escape with flowing streams, Berber homes, and scenic trails that begin just beyond Marrakech.",
     palette: "#2f8f83",
-    image: "./istockphoto-1286444418-612x612.jpg",
+    image: "./Ourika.jpg",
     experiences: ["Setti Fatma waterfalls hike", "Valley-side lunch", "Berber family tea stop"],
   },
   {
@@ -70,7 +70,7 @@ const cities = [
     description:
       "Stone mountain villages, terraced orchards, and panoramic passes make Imlil perfect for soft trekking and winter charm.",
     palette: "#5c7c4a",
-    image: "",
+    image: "Imlil.jpg",
     experiences: ["Guided village-to-village walk", "Mint tea with mountain hosts", "Toubkal viewpoint picnic"],
   },
   {
@@ -80,7 +80,7 @@ const cities = [
     description:
       "One of Morocco's most famous cascades, where rainbow mist, monkey sightings, and boat rides create a playful day out.",
     palette: "#3f88c5",
-    image: "",
+    image: "./Ouzoud.jpg",
     experiences: ["Waterfall trail circuit", "Traditional tagine by the falls", "Boat ride at the base"],
   },
   {
@@ -90,7 +90,7 @@ const cities = [
     description:
       "Gateway to Ait Benhaddou and Draa valleys, blending cinematic landscapes with kasbah architecture and desert routes.",
     palette: "#a05a2c",
-    image: "",
+    image: "Ouarzazate.webp",
     experiences: ["Ait Benhaddou guided visit", "Atlas film studios tour", "Sunset at Taourirt Kasbah"],
   },
   {
@@ -185,7 +185,6 @@ const App = () => {
   const normalizeCityName = (value) =>
     value
       .toLowerCase()
-      .replace(/\(.*?\)/g, "")
       .replace(/[^a-z0-9]/g, "");
 
   const findCityByName = (name) => {
