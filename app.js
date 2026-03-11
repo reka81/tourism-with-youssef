@@ -48,17 +48,17 @@ const cities = [
     region: "Golden dunes",
     highlight: "Star-studded nights beyond the dunes",
     description:
-      "Scale Erg Chebbi on camelback, share Berber stories by firelight, and sleep under a sky that feels infinite.",
+      "Three-Day Trip: Merzouga Desert\nDay 1: Through the Atlas to Dades On the first day, we cross the towering Atlas Mountains, enjoying breathtaking landscapes and stopping to experience authentic Berber life. As we descend toward the city of Ouarzazate, we visit Ait Ben Haddou Kasbah, a UNESCO World Heritage site and a masterpiece of human heritage.In Ouarzazate—often called theHollywood of Morocco—we visit the famous cinema studios. We then continue our journey to Kelaat M'Gouna (the City of Roses) before spending the first night in the stunning Dades Gorges.\nDay 2: Into the Golden Dunes ​On the second day, we set off to explore the Todra Gorges and continue toward Tinjdad, passing through lush oases. You will notice the scenery gradually transforming from rugged mountains to vast desert plains.Before sunset, we reach the dunes of Merzouga, where we swap our vehicle for a camel trek to reach the desert camp, where we will spend the night under the stars.",
     palette: "#9a6324",
     image: "./destination-merzouga-morocco.jpg",
-    experiences: ["Camel trek at golden hour", "Sahara storytelling circle", "Sandboarding lessons"],
+    experiences: ["Sahara storytelling circle", "Sandboarding lessons"],
   },
   {
     name: "Ourika",
     region: "Atlas valley",
     highlight: "River walks & mountain villages",
     description:
-      "A refreshing valley escape with flowing streams, Berber homes, and scenic trails that begin just beyond Marrakech.",
+          "A Journey to the Ourika Valley in the Atlas Mountains: A Day with the Berbers ​The trip to the Ourika Valley offers more than just breathtaking mountain scenery and hiking opportunities; it is an immersive exploration of the historical heritage and social structures of the Berbers (Amazigh)—one of the world's most ancient indigenous peoples. During the journey, you will visit an authentic Berber village, where a local family will graciously open their home to you, welcoming you with a traditional glass of refreshing mint tea.",
     palette: "#2f8f83",
     image: "./Ourika.jpg",
     experiences: ["Setti Fatma waterfalls hike", "Valley-side lunch", "Berber family tea stop"],
@@ -78,7 +78,7 @@ const cities = [
     region: "Middle Atlas falls",
     highlight: "Waterfall cliffs & olive groves",
     description:
-      "One of Morocco's most famous cascades, where rainbow mist, monkey sightings, and boat rides create a playful day out.",
+      "Ouzoud Waterfalls combine the splendor of nature with the fragrance of ancient Amazigh history. The highest water drop reaches 120 meters. During a guided hike with a local guide, you will also encounter some of the local wildlife macaques monkies often approach visitors.",
     palette: "#3f88c5",
     image: "./Ouzoud.jpg",
     experiences: ["Waterfall trail circuit", "Traditional tagine by the falls", "Boat ride at the base"],
